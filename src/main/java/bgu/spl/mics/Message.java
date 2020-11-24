@@ -7,6 +7,7 @@ package bgu.spl.mics;
  * contain any methods but every class that you want to send as a message (using
  * the {@link MessageBus}) must implement it.
  */
+
 public interface Message {
 
 }

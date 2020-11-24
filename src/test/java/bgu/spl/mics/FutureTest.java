@@ -22,10 +22,7 @@ public class FutureTest {
         future = new Future<>();
     }
 
-    @AfterEach
-    public void jgf () {
 
-    }
 
     @Test
     public void testResolve(){
