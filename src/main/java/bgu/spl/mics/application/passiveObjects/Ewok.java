@@ -9,19 +9,29 @@ package bgu.spl.mics.application.passiveObjects;
 public class Ewok {
 	int serialNumber;
 	boolean available;
-	
-  
+
+    /**
+     * Constructor
+     * *My own*
+     * @param serialNumber - represents the creature
+     */
+	public void Ewok(int serialNumber){
+        this.serialNumber = serialNumber;
+        available = true;
+
+    }
+
     /**
      * Acquires an Ewok
      */
     public void acquire() {
-		
+		available = false;
     }
 
     /**
      * release an Ewok
      */
     public void release() {
-    	
+    	available = true;
     }
 }

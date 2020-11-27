@@ -22,13 +22,37 @@ public class FutureTest {
         future = new Future<>();
     }
 
-
+    @Test
+    public void testGet() {
+        assertFalse(future.isDone());
+        future.resolve("");
+        future.get();
+        assertTrue(future.isDone());
+    }
 
     @Test
-    public void testResolve(){
+    public void testResolve() {
         String str = "someResult";
         future.resolve(str);
         assertTrue(future.isDone());
-        assertTrue(str.equals(future.get()));
+        assertEquals(future.get(), str);
+    }
+
+    @Test
+    public void testIsDone() {
+        String str = "someResult";
+        assertFalse(future.isDone());
+        future.resolve(str);
+        assertTrue(future.isDone());
+    }
+
+    @Test
+    public void testGetWithTimeOut() throws InterruptedException
+    {
+        assertFalse(future.isDone());
+        future.get(100,TimeUnit.MILLISECONDS);
+        assertFalse(future.isDone());
+        future.resolve("");
+        assertEquals(future.get(100,TimeUnit.MILLISECONDS),"");
     }
 }

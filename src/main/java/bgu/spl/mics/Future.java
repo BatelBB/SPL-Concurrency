@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  * Only private methods may be added to this class.
  * No public constructor is allowed except for the empty constructor.
  */
+//Future objects allow threads to inform one each other in regards to the result of the computation that followed an event that was sent.
 public class Future<T> {
 	private boolean isDone;
     private T result;
@@ -31,21 +32,22 @@ public class Future<T> {
      */
 	public T get() {
 		
-        return null; 
+        return this.result;
 	}
 	
 	/**
      * Resolves the result of this Future object.
      */
 	public void resolve (T result) {
-		
+		this.result = result;
+		this.isDone = true;
 	}
 	
 	/**
      * @return true if this object has been resolved, false otherwise
      */
 	public boolean isDone() {
-		return null;
+		return this.isDone;
 	}
 	
 	/**
@@ -61,7 +63,7 @@ public class Future<T> {
      */
 	public T get(long timeout, TimeUnit unit) {
 		
-        return null;
+        return this.result;
 	}
 
 }
