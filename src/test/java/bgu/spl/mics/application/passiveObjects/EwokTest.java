@@ -1,30 +1,30 @@
 package bgu.spl.mics.application.passiveObjects;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class EwokTest {
-
+class EwokTest {
     private Ewok testEwok;
-
-    @Before
-    public void setUp() throws Exception {
-        testEwok = new Ewok();
+    @BeforeEach
+    void setUp() {
+        testEwok = new Ewok(1);
     }
 
     @Test
-    public void testAcquire() {
+    void acquire() {
         assertTrue(testEwok.available);
         testEwok.acquire();
         assertFalse(testEwok.available);
     }
 
     @Test
-    public void testRelease() {
+    void release() {
+        assertTrue(testEwok.available);
+        testEwok.acquire();
         assertFalse(testEwok.available);
         testEwok.release();
         assertTrue(testEwok.available);

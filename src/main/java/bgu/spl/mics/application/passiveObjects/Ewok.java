@@ -10,14 +10,15 @@ public class Ewok {
 	int serialNumber;
 	boolean available;
 
+
     /**
      * Constructor
      * *My own*
      * @param serialNumber - represents the creature
      */
-	public void Ewok(int serialNumber){
-        this.serialNumber = serialNumber;
+	public Ewok(int serialNumber){
         available = true;
+        this.serialNumber = serialNumber;
 
     }
 

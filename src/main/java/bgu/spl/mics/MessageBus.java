@@ -1,5 +1,7 @@
 package bgu.spl.mics;
 
+import java.util.Queue;
+
 /**
  * The message-bus is a shared object used for communication between
  * micro-services.
@@ -95,5 +97,5 @@ public interface MessageBus {
      *                              to became available.
      */
     Message awaitMessage(MicroService m) throws InterruptedException;
-    
+
 }

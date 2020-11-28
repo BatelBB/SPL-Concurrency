@@ -1,5 +1,7 @@
 package bgu.spl.mics;
 
+import java.util.Queue;
+
 /**
  * The {@link MessageBusImpl class is the implementation of the MessageBus interface.
  * Write your implementation here!
@@ -46,7 +48,9 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void register(MicroService m) {
-		
+		Queue<MicroService> registerQueue = null;
+		assert registerQueue != null;
+		registerQueue.add(m);
 	}
 
 	@Override
@@ -56,7 +60,6 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public Message awaitMessage(MicroService m) throws InterruptedException {
-		
 		return null;
 	}
 }
