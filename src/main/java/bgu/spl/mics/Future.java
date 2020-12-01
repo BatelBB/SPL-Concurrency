@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class Future<T> {
 	private boolean isDone;
     private T result;
+    private String lockGet;
 	
 	/**
 	 * This should be the the only public constructor in this class.
@@ -31,7 +32,19 @@ public class Future<T> {
      */
 	//must use synchronization
 	public T get() {
-        return this.result;
+		//checks if resolve
+		synchronized(lockGet) {
+			while (!this.isDone()) {
+				try {
+					wait();
+				} catch (InterruptedException e){
+					Thread.currentThread().interrupt();
+					System.out.println("Interrupted the get function thread");
+
+				}
+			}
+		}
+		return this.result;
 	}
 	
 	/**
