@@ -48,9 +48,7 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void register(MicroService m) {
-		Queue<MicroService> registerQueue = null;
-		assert registerQueue != null;
-		registerQueue.add(m);
+
 	}
 
 	@Override

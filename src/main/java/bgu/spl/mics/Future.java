@@ -19,7 +19,6 @@ public class Future<T> {
 	 * This should be the the only public constructor in this class.
 	 */
 	public Future() {
-		
 	}
 	
 	/**
@@ -30,8 +29,8 @@ public class Future<T> {
      * @return return the result of type T if it is available, if not wait until it is available.
      * 	       
      */
+	//must use synchronization
 	public T get() {
-		
         return this.result;
 	}
 	
