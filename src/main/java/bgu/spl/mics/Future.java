@@ -87,11 +87,15 @@ public class Future<T> {
 	public T get(long timeout, TimeUnit unit) {
 		long millisTime = unit.toMillis(timeout);
 		final long deadline = System.currentTimeMillis() + millisTime;
-		long currentTime = deadline - System.currentTimeMillis();
-			while(currentTime < deadline){
-				if(isDone)
+		boolean TimesUp = false;
+			while(!TimesUp){
+				if(this.isDone())
 					return this.result;
-				currentTime = System.currentTimeMillis();
+
+				millisTime = deadline - System.currentTimeMillis();
+				if(millisTime <= 0L)
+					TimesUp = true;
+
 			}
 			return null;
 	}
