@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class Future<T> {
 	private boolean isDone;
     private T result;
-    private final Object lockGet = new Object();
+    private final Object lockGet = new Object(); //maybe that's wrong and not supposed to be Object()
 	
 	/**
 	 * This should be the the only public constructor in this class.
