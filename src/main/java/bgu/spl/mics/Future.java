@@ -43,13 +43,14 @@ public class Future<T> {
 
 				}
 			}
+			return this.result; //maybe that's not good
 		}
-		return this.result;
 	}
 	
 	/**
      * Resolves the result of this Future object.
      */
+	//maybe that's it?
 	public void resolve (T result) {
 		this.result = result;
 		this.isDone = true;
@@ -58,6 +59,7 @@ public class Future<T> {
 	/**
      * @return true if this object has been resolved, false otherwise
      */
+	//maybe that's it?
 	public boolean isDone() {
 		return this.isDone;
 	}
@@ -72,10 +74,27 @@ public class Future<T> {
      * @return return the result of type T if it is available, if not, 
      * 	       wait for {@code timeout} TimeUnits {@code unit}. If time has
      *         elapsed, return null.
+	 *
+	 * https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=490faed59f5937c06644b33f0fbc7c6d
+	 * If the value is resolved - the function returns it.
+	 * Otherwise - it waits for maximum of 'timeout' for the value to be resolved.
+	 * If the value is resolved within 'timeout' - the value is returned.
+	 * Otherwise - null (or some default value) is returned.
+	 *
+	 * https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=2abf8010e8cec3b2b0314222dee2c2ee
+	 * You can throw an exception
      */
 	public T get(long timeout, TimeUnit unit) {
-		
-        return this.result;
+		long millisTime = unit.toMillis(timeout);
+		final long deadline = System.currentTimeMillis() + millisTime;
+		long currentTime = deadline - System.currentTimeMillis();
+			while(currentTime < deadline){
+				if(isDone)
+					return this.result;
+				currentTime = System.currentTimeMillis();
+			}
+			return null;
 	}
+
 
 }
