@@ -1,8 +1,9 @@
 package bgu.spl.mics.application;
 
+import bgu.spl.mics.application.passiveObjects.Attack;
+import bgu.spl.mics.application.services.LeiaMicroservice;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import jdk.internal.util.xml.impl.Input;
 
 import java.io.*;
 import java.io.FileReader;
@@ -17,14 +18,10 @@ import java.io.Reader;
  */
 public class Main {
     public static void main(String[] args) {
-
-    }
-
-    public static Input getInputFromJson(String filePath) throws IOException {
         Gson gson = new Gson();
-        try (Reader reader = new FileReader(filePath)) {
-            return gson.fromJson(reader, Input.class);
-        }
+        Reader reader = new FileReader(args[1]);
+        Input input = gson.fromJson(reader, Input.class);
+        //LeiaMicroservice Leia = new LeiaMicroservice(input.getAttacks());
     }
 }
 
