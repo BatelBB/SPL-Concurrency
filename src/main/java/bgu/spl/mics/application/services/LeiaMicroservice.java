@@ -5,6 +5,7 @@ import java.util.List;
 
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.passiveObjects.Attack;
+import bgu.spl.mics.application.messages.AttackEvent;
 
 /**
  * LeiaMicroservices Initialized with Attack objects, and sends them as  {@link AttackEvent}.
