@@ -2,6 +2,7 @@ package bgu.spl.mics.application.services;
 
 
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.messages.AttackEvent;
 
 /**
  * HanSoloMicroservices is in charge of the handling {@link AttackEvent}.

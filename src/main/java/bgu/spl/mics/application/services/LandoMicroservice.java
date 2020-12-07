@@ -13,6 +13,7 @@ public class LandoMicroservice  extends MicroService {
 
     public LandoMicroservice(long duration) {
         super("Lando");
+        System.out.println("Lando");
     }
 
     @Override

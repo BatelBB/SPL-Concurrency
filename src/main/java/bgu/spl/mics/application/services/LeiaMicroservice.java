@@ -23,6 +23,7 @@ public class LeiaMicroservice extends MicroService {
     public LeiaMicroservice(Attack[] attacks) {
         super("Leia");
 		this.attacks = attacks;
+        System.out.println("Leia");
     }
 
     @Override

@@ -1,9 +1,12 @@
 package bgu.spl.mics.application;
 
 import bgu.spl.mics.application.passiveObjects.Diary;
+import bgu.spl.mics.application.passiveObjects.Ewok;
+import bgu.spl.mics.application.passiveObjects.Ewoks;
 import bgu.spl.mics.application.passiveObjects.Input;
 import bgu.spl.mics.application.services.LandoMicroservice;
 import bgu.spl.mics.application.services.LeiaMicroservice;
+import bgu.spl.mics.application.services.R2D2Microservice;
 import com.google.gson.Gson;
 
 import java.io.*;
@@ -21,14 +24,18 @@ public class Main {
         String outputFilePath = args[1];//output file path from arguments
         Input input = null;
         input= getInputFromJson(inputFilePath);
-        if(input!=null)
+        if(input!=null) {
+            System.out.println("Run!");
             run(input);
+        }
         Diary recordDiary = Diary.getInstance();
         diaryToJson(outputFilePath,recordDiary);
     }
     private static void run(Input input){
-        LeiaMicroservice Leia = new LeiaMicroservice(input.getAttacks());
+        new LeiaMicroservice(input.getAttacks());
         new LandoMicroservice(input.getLando());
+        new R2D2Microservice((input.getR2D2()));
+        Ewoks.getInstance(input.getEwoks());
     }
     private static Input getInputFromJson(String filePath) throws IOException {
         Gson gson = new Gson();

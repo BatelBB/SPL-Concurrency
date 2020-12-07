@@ -19,7 +19,6 @@ public class Ewok {
 	public Ewok(int serialNumber){
         available = true;
         this.serialNumber = serialNumber;
-
     }
 
     /**

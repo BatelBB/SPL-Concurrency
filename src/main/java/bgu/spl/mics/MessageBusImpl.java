@@ -15,13 +15,14 @@ public class MessageBusImpl implements MessageBus {
 	}
 
 	//https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=babcd640e5192717d1fa0d878f07a254
+	//singleton
 	public void getInstance(){
 
 	}
 	
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) {
-		
+
 	}
 
 	@Override
