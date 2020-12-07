@@ -1,11 +1,11 @@
-package bgu.spl.mics.application;
+package bgu.spl.mics.application.passiveObjects;
 
 import bgu.spl.mics.application.passiveObjects.Attack;
 
 public class Input {
 	private Attack[] attacks;
-	int R2D2;
-	int Lando;
+	Long R2D2;
+	Long Lando;
 	int Ewoks;
 
 	public int getEwoks() {
@@ -18,19 +18,19 @@ public class Input {
 		Ewoks = ewoks;
 	}
 
-	public int getLando() {
+	public long getLando() {
 		return Lando;
 	}
 
-	public void setLando(int lando) {
+	public void setLando(Long lando) {
 		Lando = lando;
 	}
 
-	public int getR2D2() {
+	public Long getR2D2() {
 		return R2D2;
 	}
 
-	public void setR2D2(int r2d2) {
+	public void setR2D2(Long r2d2) {
 		R2D2 = r2d2;
 	}
 
