@@ -9,4 +9,7 @@ package bgu.spl.mics.application.passiveObjects;
  */
 public class Diary {
 
+    public static Diary getInstance() {
+        return null;
+    }
 }
