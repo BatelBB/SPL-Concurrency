@@ -32,10 +32,10 @@ public class Main {
         diaryToJson(outputFilePath,recordDiary);
     }
     private static void run(Input input){
-        new LeiaMicroservice(input.getAttacks());
+        Ewoks.getInstance(input.getEwoks());
         new LandoMicroservice(input.getLando());
         new R2D2Microservice((input.getR2D2()));
-        Ewoks.getInstance(input.getEwoks());
+        new LeiaMicroservice(input.getAttacks());
     }
     private static Input getInputFromJson(String filePath) throws IOException {
         Gson gson = new Gson();
