@@ -90,7 +90,7 @@ public class Future<T> {
                 return this.result;
 
             millisTime = deadline - System.currentTimeMillis();
-            if (millisTime <= 0L) //if there is no time left - less then 0.
+            if (millisTime <= 0L) //if there is no time left - less than 0.
                 TimesUp = true;
 
         }
