@@ -15,8 +15,10 @@ import static org.graalvm.compiler.nodes.java.RegisterFinalizerNode.register;
  * {@link AttackEvent}.
  *
  * You can add private fields and public methods to this class.
- * You MAY change constructor signatures and even add new public constructors.
  */
+
+//CANNOT change the constructor signature
+//https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=b202aed11416b0f3ddf59342c60749f4
 //there's only one microservice from each
 //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=2e5ba1f89f40b2fd1c44f85cc7c04527
 public class C3POMicroservice extends MicroService {
