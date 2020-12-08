@@ -18,6 +18,8 @@ package bgu.spl.mics;
  * Only private fields and methods may be added to this class.
  * <p>
  */
+//can add protected fields
+    //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=df8d086ce1e673a2e74ce3350687d7f2
 public abstract class MicroService implements Runnable { 
     
 
@@ -144,7 +146,7 @@ public abstract class MicroService implements Runnable {
      * otherwise you will end up in an infinite loop.
      */
     @Override
-    public final void run() {
+    public void run() {
     	
     }
 
