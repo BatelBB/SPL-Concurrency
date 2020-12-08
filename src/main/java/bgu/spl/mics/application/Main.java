@@ -29,7 +29,7 @@ public class Main {
             run(input);
         }
         Diary recordDiary = Diary.getInstance();
-        diaryToJson(outputFilePath,recordDiary);
+        writeToJson(outputFilePath,recordDiary);
     }
     private static void run(Input input){
         Ewoks.getInstance(input.getEwoks());
@@ -43,7 +43,7 @@ public class Main {
             return gson.fromJson(reader, Input.class);
         }
     }
-    private static void diaryToJson(String filePath, Diary recordDiary) throws IOException {
+    private static void writeToJson(String filePath, Diary recordDiary) throws IOException {
         Gson gson = new Gson();
         try (Writer writer = new FileWriter(filePath)) {
             gson.toJson(recordDiary, writer);
