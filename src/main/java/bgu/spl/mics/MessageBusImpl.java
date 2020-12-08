@@ -42,6 +42,8 @@ public class MessageBusImpl implements MessageBus {
 
 	
 	@Override
+	//an event sent without an already-waiting microservice indicates a wrong implementation.
+	//https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=9fc3d8cc9abf9ce6694b27318a17d457
 	public <T> Future<T> sendEvent(Event<T> e) {
 		
         return null;
