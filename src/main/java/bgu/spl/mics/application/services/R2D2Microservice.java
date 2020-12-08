@@ -17,13 +17,25 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 //there's only one microservice from each
 //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=2e5ba1f89f40b2fd1c44f85cc7c04527
 public class R2D2Microservice extends MicroService {
+    private final long duration;
 
     public R2D2Microservice(long duration) {
         super("R2D2");
+        this.duration = duration;
+        System.out.println("R2D2");
     }
 
     @Override
     protected void initialize() {
+        deactivation();
 
+    }
+
+    private void deactivation() {
+        try {
+            this.wait(duration);
+        }catch(InterruptedException e) {
+            System.out.println("Exception was thrown: " + e);
+        }
     }
 }
