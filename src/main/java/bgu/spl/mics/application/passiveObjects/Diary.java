@@ -13,7 +13,7 @@ public class Diary {
     private static long beginning;
     private static final Diary diary = new Diary();
 
-    int totalAttacks;
+    AtomicInteger totalAttacks = new AtomicInteger();
     long HanSoloFinish;
     long C3POFinish;
     long R2D2Deactivate;
@@ -23,7 +23,7 @@ public class Diary {
     long R2D2Terminate;
     long LandoTerminate;
 
-    public Diary(){
+    private Diary(){
         diary.setBeginning();
     }
 
@@ -35,9 +35,9 @@ public class Diary {
         beginning = System.currentTimeMillis();
     }
 
-    public void setTotalAttacks(int totalAttacks){
-        this.totalAttacks = totalAttacks;
-    }
+    //public void setTotalAttacks(int totalAttacks){
+       // this.totalAttacks = totalAttacks;
+    //}
 
     public void setHanSoloFinishTime(){
         HanSoloFinish = beginning - System.currentTimeMillis();
