@@ -30,6 +30,10 @@ public class R2D2Microservice extends MicroService {
         deactivation();
 
     }
+    @Override
+    public void run(){
+
+    }
 
     private void deactivation() {
         try {
