@@ -28,6 +28,8 @@ public class Main {
             System.out.println("Run!");
             run(input);
         }
+        //we can use pretty printing
+        //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=cf677a1d8e2d25c77eb0feafb0c7e456
         Diary recordDiary = Diary.getInstance();
         writeToJson(outputFilePath,recordDiary);
     }
