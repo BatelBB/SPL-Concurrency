@@ -29,10 +29,16 @@ public class R2D2Microservice extends MicroService {
     protected void initialize() {
         deactivation();
 
+        close();
     }
-    @Override
-    public void run(){
 
+    @Override
+    protected void close() {
+        this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+            Diary.getInstance().setR2D2Terminate(System.currentTimeMillis());
+            System.out.println("R2D2 has done");
+            this.terminate();
+        });
     }
 
     private void deactivation() {
