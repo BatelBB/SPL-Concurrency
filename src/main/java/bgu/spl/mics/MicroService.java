@@ -20,15 +20,17 @@ package bgu.spl.mics;
  */
 //can add protected fields
     //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=df8d086ce1e673a2e74ce3350687d7f2
-public abstract class MicroService implements Runnable { 
-    
+public abstract class MicroService implements Runnable {
+
+
+    protected final String name;
 
     /**
      * @param name the micro-service name (used mainly for debugging purposes -
      *             does not have to be unique)
      */
     public MicroService(String name) {
-    	
+    	this.name = name;
     }
 
     /**
@@ -123,7 +125,7 @@ public abstract class MicroService implements Runnable {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) {
-    	
+
     }
 
     /**
@@ -144,7 +146,7 @@ public abstract class MicroService implements Runnable {
      *         construction time and is used mainly for debugging purposes.
      */
     public final String getName() {
-        return null;
+        return this.name;
     }
 
     /**
@@ -152,8 +154,15 @@ public abstract class MicroService implements Runnable {
      * otherwise you will end up in an infinite loop.
      */
     @Override
-    public void run() {
+    public final void run() {
     	
     }
+    /**
+     * added for FAQ
+     * this method is called once the microservice finished.
+     */
+    protected abstract void close();
+
+
 
 }
