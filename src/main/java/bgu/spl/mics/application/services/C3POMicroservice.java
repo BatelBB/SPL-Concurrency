@@ -3,10 +3,10 @@ package bgu.spl.mics.application.services;
 import bgu.spl.mics.Message;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
+import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Attack;
 import bgu.spl.mics.MessageBusImpl;
-
-import static org.graalvm.compiler.nodes.java.RegisterFinalizerNode.register;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 
 /**
@@ -22,18 +22,26 @@ import static org.graalvm.compiler.nodes.java.RegisterFinalizerNode.register;
 //there's only one microservice from each
 //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=2e5ba1f89f40b2fd1c44f85cc7c04527
 public class C3POMicroservice extends MicroService {
-    private AttackEvent attackEvent;
 
-    public C3POMicroservice(AttackEvent attackEvent) {
+    public C3POMicroservice() {
         super("C3PO");
-        this.attackEvent = attackEvent;
-
+        new C3POMicroservice();
         initialize();
     }
 
     @Override
     protected void initialize() {
+        Diary.getInstance().totalAttacks.incrementAndGet();
+        close();
+    }
 
+    @Override
+    protected void close() {
+        this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+            Diary.getInstance().setC3POTerminate(System.currentTimeMillis());
+            System.out.println("C3PO has done");
+            this.terminate();
+        });
     }
 
 
