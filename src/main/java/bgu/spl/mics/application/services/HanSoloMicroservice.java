@@ -3,6 +3,8 @@ package bgu.spl.mics.application.services;
 
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
+import bgu.spl.mics.application.messages.TerminateBroadcast;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 /**
  * HanSoloMicroservices is in charge of the handling {@link AttackEvent}.
@@ -19,11 +21,22 @@ public class HanSoloMicroservice extends MicroService {
 
     public HanSoloMicroservice() {
         super("Han");
+        new HanSoloMicroservice();
     }
 
 
     @Override
     protected void initialize() {
+        Diary.getInstance().totalAttacks.incrementAndGet();
+        close();
+    }
 
+    @Override
+    protected void close() {
+        this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+            Diary.getInstance().setHanSoloTerminate(System.currentTimeMillis());
+            System.out.println("Han Solo has done");
+            this.terminate();
+        });
     }
 }
