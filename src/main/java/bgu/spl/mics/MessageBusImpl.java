@@ -49,6 +49,8 @@ public class MessageBusImpl implements MessageBus {
         return null;
 	}
 
+	//no need to check if already registered
+	//https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=75e8a7aea910dad3b1eaed9ce4e23a1d
 	@Override
 	public void register(MicroService m) {
 
