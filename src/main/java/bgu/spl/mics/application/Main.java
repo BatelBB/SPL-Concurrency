@@ -25,19 +25,20 @@ public class Main {
         Input input = null;
         input= getInputFromJson(inputFilePath);
         if(input!=null) {
-            System.out.println("Run!");
+            System.out.println("Long time ago in a galaxy far far away...");
             run(input);
         }
         //we can use pretty printing
         //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=cf677a1d8e2d25c77eb0feafb0c7e456
-        Diary recordDiary = Diary.getInstance();
-        writeToJson(outputFilePath,recordDiary);
+        Diary getFromDiary = Diary.getInstance();
+        writeToJson(outputFilePath,getFromDiary);
     }
     private static void run(Input input){
-        Ewoks.getInstance(input.getEwoks());
+        new LeiaMicroservice(input.getAttacks());
         new LandoMicroservice(input.getLando());
         new R2D2Microservice((input.getR2D2()));
-        new LeiaMicroservice(input.getAttacks());
+        Ewoks.getInstance(input.getEwoks());
+
     }
     private static Input getInputFromJson(String filePath) throws IOException {
         Gson gson = new Gson();
@@ -45,10 +46,10 @@ public class Main {
             return gson.fromJson(reader, Input.class);
         }
     }
-    private static void writeToJson(String filePath, Diary recordDiary) throws IOException {
+    private static void writeToJson(String filePath, Diary diary) throws IOException {
         Gson gson = new Gson();
         try (Writer writer = new FileWriter(filePath)) {
-            gson.toJson(recordDiary, writer);
+            gson.toJson(diary, writer);
         }
     }
 }
