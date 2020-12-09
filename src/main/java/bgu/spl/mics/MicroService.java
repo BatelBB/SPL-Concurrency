@@ -52,6 +52,8 @@ public abstract class MicroService implements Runnable {
      *                 {@code type} are taken from this micro-service message
      *                 queue.
      */
+    //In case one of these threads hasn't subscribed yet, let the messages be sent to the subscribed thread
+    //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=d7d86c279f1054ba985b088234b58743
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
     	
     }
@@ -92,6 +94,10 @@ public abstract class MicroService implements Runnable {
      *         			micro-service processing this event.
      * 	       			null in case no micro-service has subscribed to {@code e.getClass()}.
      */
+    //Non-blocking - the method returns even if the message was not sent (suppose no one is registered to receive it yet).
+    //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=78b4769275378966fc5a2bcc1e5aaa0f
+    //If no one is subscribe, the message should be "thrown", and sendMessage() should return.
+    //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=cf677a1d8e2d25c77eb0feafb0c7e456
     protected final <T> Future<T> sendEvent(Event<T> e) {
         return null; 
     }
