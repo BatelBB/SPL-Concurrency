@@ -13,7 +13,7 @@ public class Diary {
     private static long beginning;
     private static final Diary diary = new Diary();
 
-    AtomicInteger totalAttacks = new AtomicInteger();
+    public AtomicInteger totalAttacks = new AtomicInteger();
     long HanSoloFinish;
     long C3POFinish;
     long R2D2Deactivate;
@@ -24,7 +24,7 @@ public class Diary {
     long LandoTerminate;
 
     private Diary(){
-        diary.setBeginning();
+        setBeginning();
     }
 
     public static Diary getInstance() {
@@ -34,10 +34,6 @@ public class Diary {
     public void setBeginning(){
         beginning = System.currentTimeMillis();
     }
-
-    //public void setTotalAttacks(int totalAttacks){
-       // this.totalAttacks = totalAttacks;
-    //}
 
     public void setHanSoloFinishTime(){
         HanSoloFinish = beginning - System.currentTimeMillis();
@@ -51,21 +47,56 @@ public class Diary {
         R2D2Deactivate = beginning - System.currentTimeMillis();
     }
 
-    public  void setLeiaTerminate(){
+    public  void setLeiaTerminate(long leiaTerminate){
         LeiaTerminate = beginning - System.currentTimeMillis();
     }
 
-    public  void setLandoTerminate(){
+    public  void setLandoTerminate(long landoTerminate){
         LandoTerminate = beginning - System.currentTimeMillis();
     }
-    public  void setHanSoloFinish(){
+    public  void setHanSoloTerminate(long hanSoloTerminate){
         HanSoloTerminate = beginning - System.currentTimeMillis();
     }
-    public  void setC3POTerminate(){
+    public  void setC3POTerminate(long c3POTerminate){
         C3POTerminate = beginning - System.currentTimeMillis();
     }
-    public  void setR2D2Terminate(){
+    public  void setR2D2Terminate(long r2D2Terminate){
         R2D2Terminate = beginning - System.currentTimeMillis();
     }
 
+    public long getHanSoloFinish() {
+        return HanSoloFinish;
+    }
+
+    public long getC3POFinish() {
+        return C3POFinish;
+    }
+
+    public long getR2D2Deactivate() {
+        return R2D2Deactivate;
+    }
+
+    public long getLeiaTerminate() {
+        return LeiaTerminate;
+    }
+
+    public long getHanSoloTerminate() {
+        return HanSoloTerminate;
+    }
+
+    public long getC3POTerminate() {
+        return C3POTerminate;
+    }
+
+    public long getR2D2Terminate() {
+        return R2D2Terminate;
+    }
+
+    public long getLandoTerminate() {
+        return LandoTerminate;
+    }
+
+    public AtomicInteger getTotalAttacks() {
+        return totalAttacks;
+    }
 }
