@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
  * No public constructor is allowed except for the empty constructor.
  */
 //Future objects allow threads to inform one each other in regards to the result of the computation that followed an event that was sent.
+    //we donד't have to use future
+    //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=0a75d46192f1adda36b0bfb4119af0ba
 public class Future<T> {
     private boolean isDone;
     private T result;
