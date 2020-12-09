@@ -1,6 +1,8 @@
 package bgu.spl.mics.application.services;
 
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.messages.TerminateBroadcast;
+import bgu.spl.mics.application.passiveObjects.Diary;
 
 /**
  * LandoMicroservice
@@ -21,7 +23,16 @@ public class LandoMicroservice  extends MicroService {
     @Override
     protected void initialize() {
        LandoAttacks();
+        close();
+    }
 
+    @Override
+    protected void close() {
+        this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+            Diary.getInstance().setLandoTerminate(System.currentTimeMillis());
+            System.out.println("Lando has done");
+            this.terminate();
+        });
     }
 
     private void LandoAttacks(){
