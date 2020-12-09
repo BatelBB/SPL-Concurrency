@@ -14,5 +14,10 @@ public class DummyMicroservice extends MicroService {
 
     }
 
+    @Override
+    protected void close() {
+
+    }
+
 
 }
