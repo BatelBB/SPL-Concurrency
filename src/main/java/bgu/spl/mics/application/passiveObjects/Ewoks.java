@@ -56,10 +56,10 @@ return;
 
     private void setNumEwoks(){
         List<Ewok> ewokList = null;
-        for(int i = 1; i<=numEwoks; i++){
-            ewokList.add(new Ewok(i));
-        }
-        synEwokList = Collections.synchronizedList(ewokList);
+        //for(int i = 1; i<=numEwoks; i++){
+           // ewokList.add(new Ewok(i));
+       // }
+       // synEwokList = Collections.synchronizedList(ewokList);
     }
 
     private boolean isEwokAvailable(int serialNumber){
