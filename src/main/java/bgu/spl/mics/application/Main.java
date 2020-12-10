@@ -8,6 +8,7 @@ import bgu.spl.mics.application.services.LandoMicroservice;
 import bgu.spl.mics.application.services.LeiaMicroservice;
 import bgu.spl.mics.application.services.R2D2Microservice;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.*;
 import java.io.FileReader;
@@ -47,7 +48,7 @@ public class Main {
         }
     }
     private static void writeToJson(String filePath, Diary diary) throws IOException {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (Writer writer = new FileWriter(filePath)) {
             gson.toJson(diary, writer);
         }
