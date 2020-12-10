@@ -11,7 +11,7 @@ public class MessageBusImpl implements MessageBus {
 
 
 	//Default constructor
-	private void MessageBusImpl(){
+	private MessageBusImpl(){
 		MessageBusImpl messageBus = new MessageBusImpl();
 	}
 
