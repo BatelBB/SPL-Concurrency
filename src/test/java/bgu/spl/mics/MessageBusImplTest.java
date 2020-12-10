@@ -13,7 +13,7 @@ class MessageBusImplTest {
 
     @BeforeEach
     void testSetUp() {
-        testMessageBusIml = new MessageBusImpl();
+        //testMessageBusIml = new MessageBusImpl();
     }
 
     //Tested it in SendEvent
