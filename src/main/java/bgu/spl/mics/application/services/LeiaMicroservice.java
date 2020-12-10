@@ -2,7 +2,9 @@ package bgu.spl.mics.application.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import bgu.spl.mics.Future;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Attack;
@@ -32,16 +34,15 @@ public class LeiaMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-        //new Diary();
-
-
     	for(int i=0; i < attacks.length; i++){
             AttackEvent attack = new AttackEvent(attacks[i]);
             //needs to wait for the microservices to subscribe
             //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=b31765abcb31823c07a7ccadbffe9a7f
             //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=20be77a3fd206cd30bd83cbd9354aa39
-    	     this.sendEvent(attack);
+    	     sendEvent(attack).get(1000, TimeUnit.MILLISECONDS);
         }
+
+    	Diary.getInstance().setBeginning();
         System.out.println("Leia: I sent the attacks");
 
     	close();
