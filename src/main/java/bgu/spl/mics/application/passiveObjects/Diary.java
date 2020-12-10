@@ -49,20 +49,20 @@ public class Diary {
     }
 
     public  void setLeiaTerminate(long leiaTerminate){
-        LeiaTerminate = beginning - System.currentTimeMillis();
+        LeiaTerminate = beginning - leiaTerminate;
     }
 
     public  void setLandoTerminate(long landoTerminate){
-        LandoTerminate = beginning - System.currentTimeMillis();
+        LandoTerminate = beginning - landoTerminate;
     }
     public  void setHanSoloTerminate(long hanSoloTerminate){
-        HanSoloTerminate = beginning - System.currentTimeMillis();
+        HanSoloTerminate = beginning - hanSoloTerminate;
     }
     public  void setC3POTerminate(long c3POTerminate){
-        C3POTerminate = beginning - System.currentTimeMillis();
+        C3POTerminate = beginning - c3POTerminate;
     }
     public  void setR2D2Terminate(long r2D2Terminate){
-        R2D2Terminate = beginning - System.currentTimeMillis();
+        R2D2Terminate = beginning - r2D2Terminate;
     }
 
     public long getHanSoloFinish() {
