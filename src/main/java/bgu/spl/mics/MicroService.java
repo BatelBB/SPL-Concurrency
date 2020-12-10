@@ -101,7 +101,9 @@ public abstract class MicroService implements Runnable {
     //If no one is subscribe, the message should be "thrown", and sendMessage() should return.
     //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=cf677a1d8e2d25c77eb0feafb0c7e456
     protected final <T> Future<T> sendEvent(Event<T> e) {
-        return null; 
+        if(e.getClass() != null)
+            return null;
+        return new Future<>();
     }
 
     /**
@@ -158,8 +160,8 @@ public abstract class MicroService implements Runnable {
     	
     }
     /**
-     * added for FAQ
-     * this method is called once the microservice finished.
+     * added from FAQ
+     * this method is called once the microservice has done.
      */
     protected abstract void close();
 
