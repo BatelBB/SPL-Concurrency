@@ -1,5 +1,6 @@
 package bgu.spl.mics.application.services;
 
+import bgu.spl.mics.Callback;
 import bgu.spl.mics.Message;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
@@ -25,13 +26,21 @@ public class C3POMicroservice extends MicroService {
 
     public C3POMicroservice() {
         super("C3PO");
-        new C3POMicroservice();
         initialize();
     }
 
     @Override
     protected void initialize() {
         Diary.getInstance().totalAttacks.incrementAndGet();
+
+        this.subscribeEvent(AttackEvent.class, (AttackEvent c) -> {
+            new Callback<AttackEvent>() {
+                @Override
+                public void call(AttackEvent attackEvent) {
+
+                }
+            };
+        });
         close();
     }
 
