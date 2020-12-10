@@ -1,10 +1,17 @@
 package bgu.spl.mics.application.services;
 
 
+import bgu.spl.mics.Broadcast;
+import bgu.spl.mics.Event;
+import bgu.spl.mics.Message;
 import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Diary;
+
+import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * HanSoloMicroservices is in charge of the handling {@link AttackEvent}.
@@ -21,7 +28,9 @@ public class HanSoloMicroservice extends MicroService {
 
     public HanSoloMicroservice() {
         super("Han");
-        new HanSoloMicroservice();
+
+        ConcurrentMap<AttackEvent, LinkedList<Message>> messageMap = new ConcurrentHashMap<>();
+        initialize();
     }
 
 
