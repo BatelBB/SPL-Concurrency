@@ -11,8 +11,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Diary {
     private static long beginning;
-    private static final Diary diary = new Diary();
-
+    private static class SingletonHolder {
+        private static final Diary diary = new Diary();
+    }
     public AtomicInteger totalAttacks = new AtomicInteger();
     long HanSoloFinish;
     long C3POFinish;
@@ -28,7 +29,7 @@ public class Diary {
     }
 
     public static Diary getInstance() {
-        return diary;
+        return SingletonHolder.diary;
     }
 
     public void setBeginning(){
@@ -96,7 +97,5 @@ public class Diary {
         return LandoTerminate;
     }
 
-    public AtomicInteger getTotalAttacks() {
-        return totalAttacks;
-    }
+
 }
