@@ -4,9 +4,7 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.Ewok;
 import bgu.spl.mics.application.passiveObjects.Ewoks;
 import bgu.spl.mics.application.passiveObjects.Input;
-import bgu.spl.mics.application.services.LandoMicroservice;
-import bgu.spl.mics.application.services.LeiaMicroservice;
-import bgu.spl.mics.application.services.R2D2Microservice;
+import bgu.spl.mics.application.services.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -26,19 +24,40 @@ public class Main {
         Input input = null;
         input= getInputFromJson(inputFilePath);
         if(input!=null) {
-            System.out.println("Long time ago in a galaxy far far away...");
-            run(input);
+            System.out.println("A Long time ago in a galaxy far far away...");
+            initiate(input);
         }
         //we can use pretty printing
         //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=cf677a1d8e2d25c77eb0feafb0c7e456
         Diary getFromDiary = Diary.getInstance();
         writeToJson(outputFilePath,getFromDiary);
     }
-    private static void run(Input input){
-        new LeiaMicroservice(input.getAttacks());
-        new LandoMicroservice(input.getLando());
-        new R2D2Microservice((input.getR2D2()));
+    private static void initiate(Input input){
+        Thread threadLeia = new Thread(new LeiaMicroservice(input.getAttacks()));
         Ewoks.getInstance(input.getEwoks());
+        Thread threadHan = new Thread(new HanSoloMicroservice());
+        Thread threadC3PO = new Thread(new C3POMicroservice());
+        Thread threadR2D2 = new Thread(new R2D2Microservice((input.getR2D2())));
+        Thread threadLando = new Thread(new LandoMicroservice(input.getLando()));
+
+        threadLeia.start();
+        threadHan.start();
+        threadC3PO.start();
+        threadR2D2.start();
+        threadLando.start();
+
+        try {
+            threadLeia.join();
+            threadHan.join();
+            threadC3PO.join();
+            threadR2D2.join();
+            threadLando.join();
+
+        }catch (InterruptedException e){
+            System.out.println("Exception was thrown: "+ e);
+        };
+
+        System.out.println("The good ones won");
 
     }
     private static Input getInputFromJson(String filePath) throws IOException {
