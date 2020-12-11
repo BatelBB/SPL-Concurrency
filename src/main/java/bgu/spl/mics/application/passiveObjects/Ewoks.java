@@ -14,28 +14,34 @@ import java.util.*;
 //can add public method
 //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=1823489ac57e9f027ea846b1b636a554
 public class Ewoks {
-    private final int numEwoks;
+    private int numEwoks;
     private List<Ewok> synEwokList;
-    private static Ewoks ewokInstance;
 
-    private Ewoks (int numEwoks){
-        this.numEwoks = numEwoks;
-        System.out.println("EWOKSSSS");
-        setNumEwoks();
+    private static class EwoksSingletonHolder{
+        private static Ewoks ewoksInstance = new Ewoks();
     }
-    public synchronized void getEwok(int[] serialNumbers){
-return;
+    private Ewoks(){
+        synEwokList = new LinkedList<Ewok>();
     }
-    public static Ewoks getInstance(int numEwoks){
-        if(ewokInstance == null){
-            synchronized (Ewoks.class){
-                if(ewokInstance == null){
-                    ewokInstance = new Ewoks(numEwoks);
-                }
-            }
+
+   // private Ewoks (int numEwoks){
+   //     this.numEwoks = numEwoks;
+   //     System.out.println("EWOKSSSS");
+   //     setNumEwoks();
+   // }
+   // public synchronized void getEwok(int[] serialNumbers){
+///return;
+   // }
+    public static Ewoks getInstance(){
+        //if(EwoksSingletonHolder.ewoksInstance == null){
+            //synchronized (Ewoks.class){
+                //if(EwoksSingletonHolder.ewoksInstance == null){
+                    return EwoksSingletonHolder.ewoksInstance;
+               // }
+           // }
         }
-        return ewokInstance;
-    }
+        //return Ewoks;
+    //}
     private boolean resourceManager(int[] serialNumbers){
         for(int i = 0; i < serialNumbers.length; i++){
             if(!isEwokAvailable(i)){
