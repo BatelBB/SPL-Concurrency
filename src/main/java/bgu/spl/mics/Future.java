@@ -21,6 +21,8 @@ public class Future<T> {
      * This should be the the only public constructor in this class.
      */
     public Future() {
+        isDone = false;
+        result = null;
     }
 
     /**
@@ -58,7 +60,7 @@ public class Future<T> {
      * @return true if this object has been resolved, false otherwise
      */
     //maybe that's it?
-    public boolean isDone() {
+    public synchronized boolean isDone() {
         return this.isDone;
     }
 
