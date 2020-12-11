@@ -17,21 +17,34 @@ public class Ewok {
      * @param serialNumber - represents the creature
      */
 	public Ewok(int serialNumber){
-        available = true;
+        this.available = true;
         this.serialNumber = serialNumber;
     }
 
+    public void setSerialNumber(int serialNumber){
+        this.serialNumber = serialNumber;
+    }
+
+    public int getSerialNumber(){
+        return serialNumber;
+    }
+
+    public boolean isAvailable(){
+	    return available;
+    }
     /**
      * Acquires an Ewok
      */
-    public void acquire() {
+    public synchronized void acquire() {
 		available = false;
+        notifyAll();
     }
 
     /**
      * release an Ewok
      */
-    public void release() {
+    public synchronized void release() {
     	available = true;
+    	notifyAll();
     }
 }
