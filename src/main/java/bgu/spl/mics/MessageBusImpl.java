@@ -1,5 +1,7 @@
 package bgu.spl.mics;
 
+import java.util.Queue;
+
 /**
  * The {@link MessageBusImpl class is the implementation of the MessageBus interface.
  * Write your implementation here!
@@ -15,9 +17,8 @@ public class MessageBusImpl implements MessageBus {
 
 	//https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=babcd640e5192717d1fa0d878f07a254
 	//singleton
-	public static MessageBus getInstance(){
+	public void getInstance(){
 
-		return null;
 	}
 	/**
 	 * Subscribes {@code m} to receive {@link Event}s of type {@code type}.
