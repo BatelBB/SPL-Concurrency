@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Diary {
     private static long beginning;
-    private static class SingletonHolder {
+    private static class SingletonDiaryHolder {
         private static final Diary diary = new Diary();
     }
     public AtomicInteger totalAttacks = new AtomicInteger();
@@ -29,7 +29,7 @@ public class Diary {
     }
 
     public static Diary getInstance() {
-        return SingletonHolder.diary;
+        return SingletonDiaryHolder.diary;
     }
 
     public void setBeginning(){
