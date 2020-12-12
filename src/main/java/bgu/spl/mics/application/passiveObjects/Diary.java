@@ -36,12 +36,12 @@ public class Diary {
         beginning = System.currentTimeMillis();
     }
 
-    public void setHanSoloFinishTime(){
-        HanSoloFinish = beginning - System.currentTimeMillis();
+    public void setHanSoloFinishTime(long hanSoloFinishTime){
+        HanSoloFinish = beginning - hanSoloFinishTime;
     }
 
-    public void setC3POFinish(){
-        C3POFinish = beginning - System.currentTimeMillis();
+    public void setC3POFinish(long C3POFinishtime){
+        C3POFinish = beginning - C3POFinishtime;
     }
 
     public void setR2D2Deactivate(){
