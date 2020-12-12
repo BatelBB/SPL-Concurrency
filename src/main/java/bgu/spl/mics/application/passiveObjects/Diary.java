@@ -40,8 +40,8 @@ public class Diary {
         HanSoloFinish = beginning - hanSoloFinishTime;
     }
 
-    public void setC3POFinish(long C3POFinishtime){
-        C3POFinish = beginning - C3POFinishtime;
+    public void setC3POFinish(long C3POFinishTime){
+        C3POFinish = beginning - C3POFinishTime;
     }
 
     public void setR2D2Deactivate(){
