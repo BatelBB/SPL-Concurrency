@@ -11,7 +11,6 @@ public class AttackEvent implements Event<Boolean> {
     }
 	public AttackEvent(Attack attack){
 	    this.attack = attack;
-        System.out.println("The attack was created");
     }
 
     public int GetDuration(){
