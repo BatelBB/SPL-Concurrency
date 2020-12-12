@@ -1,7 +1,6 @@
 package bgu.spl.mics.application.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import bgu.spl.mics.Future;
@@ -24,15 +23,13 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=2e5ba1f89f40b2fd1c44f85cc7c04527
 public class LeiaMicroservice extends MicroService {
 	private final Attack[] attacks;
-	private final Future[] futures = null;
-
-
+	private List<Future> futures = new ArrayList<>();
 
     public LeiaMicroservice(Attack[] attacks) {
         super("Leia");
 		this.attacks = attacks;
         System.out.println("Leia is here!");
-		initialize();
+
     }
 
     @Override
@@ -42,8 +39,9 @@ public class LeiaMicroservice extends MicroService {
         }catch (InterruptedException e){
             System.out.println("Leia has been interrupted");
         }
-
+        Diary.getInstance().setBeginning();
         sandAttack();
+        System.out.println("Leia: I sent the attacks");
 
         deactivate();
 
@@ -60,24 +58,33 @@ public class LeiaMicroservice extends MicroService {
     }
 
     private void sandAttack(){
+
         for(int i=0; i < attacks.length; i++){
             AttackEvent attack = new AttackEvent(attacks[i]);
+            System.out.println("Attack " + i);
             //needs to wait for the microservices to subscribe
             //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=b31765abcb31823c07a7ccadbffe9a7f
             //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=20be77a3fd206cd30bd83cbd9354aa39
-            futures[i]  = sendEvent(attack);
+
+            Future futureAttack = sendEvent(attack);
+            if(futureAttack != null)
+            futures.add(futureAttack);
+            //futures.add(this.sendEvent(attack));
             //.get(1000, TimeUnit.MILLISECONDS);
             //sendBroadcast();
         }
-        Diary.getInstance().setBeginning();
-        System.out.println("Leia: I sent the attacks");
+
+
     }
 
     private void deactivate(){
-        for (Future future : futures) {
-            future.get();
-        }
+        assert futures != null;
+            for (Future future : futures) {
+                future.get();
+           }
+
         DeactivationEvent deactivate = new DeactivationEvent();
         sendEvent(deactivate);
+        System.out.println("Leia: Sent the deactivation event!");
     }
 }
