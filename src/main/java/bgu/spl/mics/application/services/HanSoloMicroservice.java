@@ -104,7 +104,7 @@ public class HanSoloMicroservice extends MicroService {
             //sort the left side
             MergeSort(ewoks, Start, mid);
             //sort the right side
-            MergeSort(ewoks, mid, End);
+            MergeSort(ewoks, mid+1, End);
             //merge the sorted parts
             merge(ewoks, Start, mid, End);
         }
