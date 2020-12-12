@@ -58,16 +58,18 @@ public class Ewoks {
      *
      * @param serialNumber
      */
-    public synchronized void resourceManager(int serialNumber) {
+    public void resourceManager(int serialNumber) {
         Ewok ewok = ewokArray.get(serialNumber-1);
-        while (!ewok.isAvailable()) {
+        synchronized(this) {
+            while (!ewok.isAvailable()) {
                 try {
                     wait();
                 } catch (InterruptedException e) {
                     System.out.println("Exception was thrown: " + e);
                 }
             }
-        ewok.acquire();
+            ewok.acquire();
+        }
     }
 
     /**
