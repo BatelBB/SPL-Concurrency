@@ -41,11 +41,13 @@ public class Main {
         Thread threadR2D2 = new Thread(new R2D2Microservice((input.getR2D2())));
         Thread threadLando = new Thread(new LandoMicroservice(input.getLando()));
 
+
         threadLeia.start();
         threadHan.start();
         threadC3PO.start();
         threadR2D2.start();
         threadLando.start();
+
 
         try {
             threadLeia.join();
@@ -54,9 +56,10 @@ public class Main {
             threadR2D2.join();
             threadLando.join();
 
+
         }catch (InterruptedException e){
             System.out.println("Exception was thrown: "+ e);
-        };
+        }
 
         System.out.println("The good ones won");
 
