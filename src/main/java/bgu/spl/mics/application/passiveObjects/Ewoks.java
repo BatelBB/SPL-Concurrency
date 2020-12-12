@@ -15,14 +15,16 @@ import java.util.*;
 //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=1823489ac57e9f027ea846b1b636a554
 public class Ewoks {
     private int numEwoks;
-    private final ArrayList<Ewok> synEwokArray;
+    private final ArrayList<Ewok> ewokArray;
 
+    //Singleton holder
     private static class EwoksSingletonHolder {
         private static final Ewoks ewoksInstance = new Ewoks();
     }
 
+    //private constructor
     private Ewoks() {
-        synEwokArray = new ArrayList<Ewok>();
+        ewokArray = new ArrayList<>();
     }
 
     // private Ewoks (int numEwoks){
@@ -33,6 +35,13 @@ public class Ewoks {
     // public synchronized void getEwok(int[] serialNumbers){
 ///return;
     // }
+
+    /**
+     * OUR
+     * Singleton getInstance
+     *
+     * @return EwoksSingletonHolder.ewoksInstance
+     */
     public static Ewoks getInstance() {
         //if(EwoksSingletonHolder.ewoksInstance == null){
         //synchronized (Ewoks.class){
@@ -42,44 +51,50 @@ public class Ewoks {
         // }
     }
 
-    //return Ewoks;
-    //}
-    public void resourceManager(int serialNumber) {
-        Ewok ewok = synEwokArray.get(serialNumber);
-        synchronized (ewok) {
-            while (!ewok.isAvailable()) {
+    /**
+     * OUR
+     * Checks if the ewok with the serial number is available
+     * if it's available it calls the assignResources method
+     *
+     * @param serialNumber
+     */
+    public synchronized void resourceManager(int serialNumber) {
+        Ewok ewok = ewokArray.get(serialNumber-1);
+        while (!ewok.isAvailable()) {
                 try {
                     wait();
                 } catch (InterruptedException e) {
                     System.out.println("Exception was thrown: " + e);
                 }
             }
-            assignResources(serialNumber);
-        }
+        ewok.acquire();
     }
 
+    /**
+     * OUR
+     * Get the serial number to release
+     * notifies all when it's done.
+     *
+     * @param serialNumber
+     */
     public void releaseResources(int serialNumber) {
-        Ewok ewok = synEwokArray.get(serialNumber);
-        synchronized (ewok) {
+        Ewok ewok = ewokArray.get(serialNumber-1);
+        synchronized (this) {
             ewok.release();
+            notifyAll();
         }
-        notifyAll();
+
     }
 
+    /**
+     * OUR
+     * adds the new ewoks to the ewokArray
+     *
+     * @param numEwoks
+     */
     public void setNumEwoks(int numEwoks) {
         for (int i = 1; i <= numEwoks; i++) {
-            this.synEwokArray.add(new Ewok(i));
+            this.ewokArray.add(new Ewok(i));
         }
     }
-
-    public boolean isEwokAvailable(int serialNumber) {
-        return synEwokArray.get(serialNumber).available;
-    }
-
-    private void assignResources(int serialNumber) {
-        for (int i = 1; i <= serialNumber; i++) {
-            synEwokArray.get(i).acquire();
-        }
-    }
-
 }
