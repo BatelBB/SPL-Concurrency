@@ -10,6 +10,7 @@ import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Diary;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -36,6 +37,11 @@ public class HanSoloMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
+        subscribeEvent(AttackEvent.class, (AttackEvent Attack) -> {
+            List<Integer> ewoks = Attack.attack.getSerials();
+            int duration = Attack.GetDuration();
+
+        });
         Diary.getInstance().totalAttacks.incrementAndGet();
         close();
     }
@@ -48,5 +54,5 @@ public class HanSoloMicroservice extends MicroService {
             this.terminate();
         });
     }
+
 }
-//Test
