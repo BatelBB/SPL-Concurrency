@@ -20,7 +20,7 @@ public class MessageBusImpl implements MessageBus {
 	private Map<String, LinkedBlockingQueue<MicroService>> MessageMap;
 	private Map<Message, Future> eventFutureHashMap;
 
-	private static class MessageBusImplsingletonHolder {
+	private static class MessageBusImplSingletonHolder {
 		private static final MessageBus messageBus = new MessageBusImpl();
 	}
 
@@ -40,7 +40,7 @@ public class MessageBusImpl implements MessageBus {
 	//https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=babcd640e5192717d1fa0d878f07a254
 	//singleton
 	public static MessageBus getInstance() {
-		return MessageBusImplsingletonHolder.messageBus;
+		return MessageBusImplSingletonHolder.messageBus;
 	}
 
 	/**
@@ -64,7 +64,9 @@ public class MessageBusImpl implements MessageBus {
 			if (!MessageMap.get(type.getName()).contains(m))
 				try {
 					MessageMap.get(type.getName()).put(m);
+					System.out.println(m.getName() +" " +type.getSimpleName()) ;
 				} catch (Exception e) {
+					System.out.println("subscribeEvent Exception " + e);
 				}
 		}
 	}
@@ -78,7 +80,7 @@ public class MessageBusImpl implements MessageBus {
 	 */
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, MicroService m) {
-
+		System.out.println("microservice " +m.getName() +" Subscribed to " +type.getSimpleName());
 		//if the massage map doesn't contain the broadcast type add it in
 		if (!MessageMap.containsKey(type.getName()))
 			MessageMap.put(type.getName(), new LinkedBlockingQueue<>());
@@ -90,7 +92,7 @@ public class MessageBusImpl implements MessageBus {
 				try {
 					MessageMap.get(type.getName()).put(m);
 				} catch (Exception e) {
-					System.out.println("got exception" + e);
+					e.printStackTrace();
 				}
 		}
 	}
@@ -126,11 +128,11 @@ public class MessageBusImpl implements MessageBus {
 		LinkedBlockingQueue<MicroService> MicroServiceBlockingQueue = MessageMap.get(b.getClass().getName());
 
 		//run on the queue and add the broadcast
-		for (int i = 0; i < MicroServiceBlockingQueue.size(); i++) {
+		for (MicroService microService : MicroServiceBlockingQueue) {
 			try {
-				MicroServiceMap.get(i).put(b);
+				MicroServiceMap.get(microService).put(b);
 			} catch (Exception e) {
-				System.out.println("got exception" + e);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -177,7 +179,7 @@ public class MessageBusImpl implements MessageBus {
 				if (MicroServiceMap.containsKey(SingleMicroService))
 					MicroServiceMap.get(SingleMicroService).add(e);
 			} catch (Exception x) {
-				System.out.println("got exception" + x);
+				x.printStackTrace();
 			}
 
 
@@ -213,12 +215,12 @@ public class MessageBusImpl implements MessageBus {
 	public void unregister(MicroService m) {
 
 		if (MicroServiceMap.containsKey(m)) {
-			for (int i = 0; i < MicroServiceMap.get(m).size(); i++) {
-				synchronized (eventFutureHashMap.get(i)) {
+			for (Message message: MicroServiceMap.get(m)) {
+				synchronized (eventFutureHashMap.get(message)) {
 
 					//if there is still a eventFutureHashMap allocated to m remove it
-					if (eventFutureHashMap.get(i) != null) {
-						eventFutureHashMap.get(i).resolve(null);
+					if (eventFutureHashMap.get(message) != null) {
+						eventFutureHashMap.get(message).resolve(true);
 					}
 				}
 			}
