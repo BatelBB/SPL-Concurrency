@@ -22,10 +22,12 @@ public class Main {
         String inputFilePath = args[0]; //input file path from arguments
         String outputFilePath = args[1];//output file path from arguments
         Input input = getInputFromJson(inputFilePath);
-
+        Ewoks ewoks = Ewoks.getInstance();
         if(input!=null) {
             System.out.println("A Long time ago in a galaxy far far away...");
+            ewoks.setNumEwoks(input.getEwoks());
             initiate(input);
+
         }
         //we can use pretty printing
         //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=cf677a1d8e2d25c77eb0feafb0c7e456
@@ -34,7 +36,6 @@ public class Main {
     }
     private static void initiate(Input input){
         Thread threadLeia = new Thread(new LeiaMicroservice(input.getAttacks()));
-        Ewoks.getInstance(input.getEwoks());
         Thread threadHan = new Thread(new HanSoloMicroservice());
         Thread threadC3PO = new Thread(new C3POMicroservice());
         Thread threadR2D2 = new Thread(new R2D2Microservice((input.getR2D2())));
