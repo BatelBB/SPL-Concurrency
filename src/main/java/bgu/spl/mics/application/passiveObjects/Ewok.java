@@ -37,7 +37,7 @@ public class Ewok {
      */
     public synchronized void acquire() {
 		available = false;
-        notifyAll();
+
     }
 
     /**
