@@ -117,6 +117,7 @@ public abstract class MicroService implements Runnable {
     //If no one is subscribe, the message should be "thrown", and sendMessage() should return.
     //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=cf677a1d8e2d25c77eb0feafb0c7e456
     protected final <T> Future<T> sendEvent(Event<T> e) {
+        System.out.println("Sent the event "+e.getClass().getSimpleName());
         MessageBus messageBusInstance = MessageBusImpl.getInstance();
         return messageBusInstance.sendEvent(e);
     }
