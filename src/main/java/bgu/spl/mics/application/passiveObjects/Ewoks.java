@@ -58,9 +58,10 @@ public class Ewoks {
         }
     }
 
-    public void releaseResources(int[] serialNumbers) {
-        for (int serialNumber : serialNumbers) {
-            synEwokArray.get(serialNumbers[serialNumber - 1]).release();
+    public void releaseResources(int serialNumber) {
+        Ewok ewok = synEwokArray.get(serialNumber);
+        synchronized (ewok) {
+            ewok.release();
         }
         notifyAll();
     }
