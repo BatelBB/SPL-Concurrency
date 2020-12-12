@@ -8,6 +8,7 @@ import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Attack;
 import bgu.spl.mics.MessageBusImpl;
 import bgu.spl.mics.application.passiveObjects.Diary;
+import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 import java.util.List;
 
@@ -33,27 +34,54 @@ public class C3POMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-        subscribeEvent(AttackEvent.class, (AttackEvent Attack) -> {
+        this.subscribeEvent(AttackEvent.class, (AttackEvent Attack) -> {
+            //sorted list of ewoks needed for the attack
             List<Integer> ewoks = SortEwoks(Attack.attack.getSerials());
-            int duration = Attack.GetDuration();
+            long duration = Attack.GetDuration();
 
-            //TODO: release resors
-
+            //ask for the ewoks
+            for (Integer ewok : ewoks) {
+                Ewoks.getInstance().resourceManager(ewok);
+            }
+            //atacks
+            ExecuteAttack(duration);
+            //release resources
+            for (Integer ewok : ewoks) {
+                Ewoks.getInstance().releaseResources(ewok);
+            }
+            //record in the diary the end of the attack
+            Diary.getInstance().setC3POFinish(System.currentTimeMillis());
+            complete(Attack, true);
         });
 
-        Diary.getInstance().totalAttacks.incrementAndGet();
 
         close();
     }
 
     @Override
     protected void close() {
+        //subscribe to Broadcasts of type TerminateBroadcast
         this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+            //record in the diary the termination time of hansolo
             Diary.getInstance().setC3POTerminate(System.currentTimeMillis());
             System.out.println("C3PO has done");
             this.terminate();
         });
     }
+
+    //Attacking
+    private void ExecuteAttack(Long duration){
+        try {
+            //record in the diary the attack
+            Diary.getInstance().totalAttacks.incrementAndGet();
+            Thread.sleep(duration);
+        }catch (InterruptedException e){
+            System.out.println("Interrupted" +e);
+        }
+
+    }
+
+
     //MergeSort implement
     private List<Integer> SortEwoks(List<Integer> ewoks){
         System.out.println("unsorted attacking ewoks" +ewoks);
@@ -64,8 +92,11 @@ public class C3POMicroservice extends MicroService {
     private void MergeSort(List<Integer> ewoks, int Start,int End){
         if(End>Start){
             int mid = (End+Start)/2;
+            //sort the left side
             MergeSort(ewoks, Start, mid);
+            //sort the right side
             MergeSort(ewoks, mid, End);
+            //merge the sorted parts
             merge(ewoks,Start,mid,End);
         }
     }

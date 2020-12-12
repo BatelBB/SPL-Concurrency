@@ -8,6 +8,7 @@ import bgu.spl.mics.MicroService;
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Diary;
+import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.concurrent.ConcurrentMap;
  * HanSoloMicroservices is in charge of the handling {@link AttackEvent}.
  * This class may not hold references for objects which it is not responsible for:
  * {@link AttackEvent}.
- *
+ * <p>
  * You can add private fields and public methods to this class.
  */
 //CANNOT change the constructor signature
@@ -37,45 +38,79 @@ public class HanSoloMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
-        subscribeEvent(AttackEvent.class, (AttackEvent Attack) -> {
+        //subscribe to events of type attackevent
+        this.subscribeEvent(AttackEvent.class, (AttackEvent Attack) -> {
+
+            //sorted list of ewoks needed for the attack
             List<Integer> ewoks = SortEwoks(Attack.attack.getSerials());
-            int duration = Attack.GetDuration();
-            for(int i=0; i< ewoks.size(); i++){
+            long duration = Attack.GetDuration();
 
+            //ask for the ewoks
+            for (Integer ewok : ewoks) {
+                Ewoks.getInstance().resourceManager(ewok);
             }
-            //TODO: release resors
+            //atacks
+            ExecuteAttack(duration);
 
+            //release resources
+            for (Integer ewok : ewoks) {
+                Ewoks.getInstance().releaseResources(ewok);
+            }
+
+            //record in the diary the end of the attack
+            Diary.getInstance().setHanSoloFinishTime(System.currentTimeMillis());
+            complete(Attack, true);
         });
-        Diary.getInstance().totalAttacks.incrementAndGet();
+
         close();
     }
 
     @Override
     protected void close() {
+
+        //subscribe to Broadcasts of type TerminateBroadcast
         this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+
+            //record in the diary the termination time of hansolo
             Diary.getInstance().setHanSoloTerminate(System.currentTimeMillis());
             System.out.println("Han Solo has done");
             this.terminate();
         });
     }
 
-    //MergeSort implement
-    private List<Integer> SortEwoks(List<Integer> ewoks){
-        System.out.println("unsorted attacking ewoks" +ewoks);
-      MergeSort(ewoks, 0 , ewoks.size()-1);
-        System.out.println("sorted attacking ewoks" +ewoks);
-      return ewoks;
+    //Attacking
+    private void ExecuteAttack(Long duration) {
+        try {
+            //record in the diary the attack
+            Diary.getInstance().totalAttacks.incrementAndGet();
+            Thread.sleep(duration);
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted" + e);
+        }
+
     }
-    private void MergeSort(List<Integer> ewoks, int Start,int End){
-        if(End>Start){
-            int mid = (End+Start)/2;
+
+    //MergeSort implement
+    private List<Integer> SortEwoks(List<Integer> ewoks) {
+        System.out.println("unsorted attacking ewoks" + ewoks);
+        MergeSort(ewoks, 0, ewoks.size() - 1);
+        System.out.println("sorted attacking ewoks" + ewoks);
+        return ewoks;
+    }
+
+    private void MergeSort(List<Integer> ewoks, int Start, int End) {
+        if (End > Start) {
+            int mid = (End + Start) / 2;
+            //sort the left side
             MergeSort(ewoks, Start, mid);
-             MergeSort(ewoks, mid, End);
-            merge(ewoks,Start,mid,End);
+            //sort the right side
+            MergeSort(ewoks, mid, End);
+            //merge the sorted parts
+            merge(ewoks, Start, mid, End);
         }
     }
-    private void merge(List<Integer> ewoks, int Start, int mid, int End)
-    {
+
+    private void merge(List<Integer> ewoks, int Start, int mid, int End) {
         // Find sizes of two Lists to be merged
         int LeftSize = mid - Start + 1;
         int RightSize = End - mid;
@@ -101,8 +136,7 @@ public class HanSoloMicroservice extends MicroService {
             if (Left[i] <= Right[j]) {
                 ewoks.set(k, Left[i]);
                 i++;
-            }
-            else {
+            } else {
                 ewoks.set(k, Right[j]);
                 j++;
             }
