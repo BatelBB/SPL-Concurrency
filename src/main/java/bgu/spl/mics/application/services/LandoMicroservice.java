@@ -19,14 +19,23 @@ public class LandoMicroservice extends MicroService {
         super("Lando");
         this.duration = duration;
         System.out.println("Lando is here");
+
     }
 
     @Override
     protected void initialize() {
-        subscribeEvent(BombDestroyerEvent.class, (BombDestroyerEvent type) -> {
+        subscribeEvent(BombDestroyerEvent.class, (BombDestroyerEvent bombDestroyerEvent) -> {
+            System.out.println("Lando subscribed");
             LandoAttacks();
+            //TerminateBroadcast terminateBroadcast = new TerminateBroadcast();
+            //sendBroadcast(terminateBroadcast);
+            System.out.println("Lando sending termination broadcast!");
+            this.sendBroadcast(new TerminateBroadcast());
+            complete(bombDestroyerEvent,true);
+
         });
         close();
+
     }
 
     @Override
@@ -38,11 +47,12 @@ public class LandoMicroservice extends MicroService {
         });
     }
 
-    private void LandoAttacks() {
+    private synchronized void LandoAttacks() {
         try {
             this.wait(duration);
+            System.out.println("Lando: BOOM!");
         } catch (InterruptedException e) {
-            System.out.println("Exception was thrown: " + e);
+            e.printStackTrace();
         }
     }
 }
