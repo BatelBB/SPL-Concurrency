@@ -21,8 +21,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         String inputFilePath = args[0]; //input file path from arguments
         String outputFilePath = args[1];//output file path from arguments
-        Input input = null;
-        input= getInputFromJson(inputFilePath);
+        Input input = getInputFromJson(inputFilePath);
+
         if(input!=null) {
             System.out.println("A Long time ago in a galaxy far far away...");
             initiate(input);

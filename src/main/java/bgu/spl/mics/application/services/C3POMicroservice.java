@@ -14,7 +14,7 @@ import bgu.spl.mics.application.passiveObjects.Diary;
  * C3POMicroservices is in charge of the handling {@link AttackEvent}.
  * This class may not hold references for objects which it is not responsible for:
  * {@link AttackEvent}.
- *
+ * <p>
  * You can add private fields and public methods to this class.
  */
 
@@ -31,16 +31,12 @@ public class C3POMicroservice extends MicroService {
 
     @Override
     protected void initialize() {
+        subscribeEvent(AttackEvent.class, (AttackEvent type) -> {
+            ExecuteAttack();
+        });
+
         Diary.getInstance().totalAttacks.incrementAndGet();
 
-        this.subscribeEvent(AttackEvent.class, (AttackEvent c) -> {
-            new Callback<AttackEvent>() {
-                @Override
-                public void call(AttackEvent attackEvent) {
-
-                }
-            };
-        });
         close();
     }
 
@@ -53,5 +49,8 @@ public class C3POMicroservice extends MicroService {
         });
     }
 
+    private void ExecuteAttack() {
+
+    }
 
 }

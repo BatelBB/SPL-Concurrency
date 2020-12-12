@@ -40,6 +40,7 @@ public class LeiaMicroservice extends MicroService {
             //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=b31765abcb31823c07a7ccadbffe9a7f
             //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=20be77a3fd206cd30bd83cbd9354aa39
     	     sendEvent(attack).get(1000, TimeUnit.MILLISECONDS);
+    	     sendBroadcast();
         }
 
     	Diary.getInstance().setBeginning();
