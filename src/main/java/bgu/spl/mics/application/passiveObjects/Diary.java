@@ -37,32 +37,32 @@ public class Diary {
     }
 
     public void setHanSoloFinishTime(long hanSoloFinishTime){
-        HanSoloFinish = beginning - hanSoloFinishTime;
+        HanSoloFinish =  hanSoloFinishTime - beginning;
     }
 
     public void setC3POFinish(long C3POFinishTime){
-        C3POFinish = beginning - C3POFinishTime;
+        C3POFinish = C3POFinishTime- beginning;
     }
 
-    public void setR2D2Deactivate(){
-        R2D2Deactivate = beginning - System.currentTimeMillis();
+    public void setR2D2Deactivate(long r2D2Deactivate){
+        R2D2Deactivate = r2D2Deactivate- beginning;
     }
 
     public  void setLeiaTerminate(long leiaTerminate){
-        LeiaTerminate = beginning - leiaTerminate;
+        LeiaTerminate =  leiaTerminate- beginning;
     }
 
     public  void setLandoTerminate(long landoTerminate){
-        LandoTerminate = beginning - landoTerminate;
+        LandoTerminate = landoTerminate- beginning;
     }
     public  void setHanSoloTerminate(long hanSoloTerminate){
-        HanSoloTerminate = beginning - hanSoloTerminate;
+        HanSoloTerminate =  hanSoloTerminate- beginning;
     }
     public  void setC3POTerminate(long c3POTerminate){
-        C3POTerminate = beginning - c3POTerminate;
+        C3POTerminate =  c3POTerminate- beginning;
     }
     public  void setR2D2Terminate(long r2D2Terminate){
-        R2D2Terminate = beginning - r2D2Terminate;
+        R2D2Terminate =  r2D2Terminate- beginning;
     }
 
     public long getHanSoloFinish() {
