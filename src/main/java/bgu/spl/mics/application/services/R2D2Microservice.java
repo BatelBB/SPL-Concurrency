@@ -25,13 +25,19 @@ public class R2D2Microservice extends MicroService {
     public R2D2Microservice(long duration) {
         super("R2D2");
         this.duration = duration;
-        System.out.println("R2D2");
+        System.out.println("R2D2 is here");
+
     }
 
     @Override
     protected void initialize() {
-        subscribeEvent(DeactivationEvent.class, (DeactivationEvent type) -> {
+        subscribeEvent(DeactivationEvent.class, (DeactivationEvent deactivationEvent) -> {
+            System.out.println("R2D2 subscribed");
             deactivation();
+            BombDestroyerEvent bombDestroyerEvent = new BombDestroyerEvent();
+            sendEvent(bombDestroyerEvent);
+            complete(deactivationEvent, true);
+
         });
         close();
     }
@@ -45,9 +51,11 @@ public class R2D2Microservice extends MicroService {
         });
     }
 
-    private void deactivation() {
+    private synchronized void deactivation() {
         try {
             this.wait(duration);
+            Diary.getInstance().setR2D2Deactivate(System.currentTimeMillis());
+            System.out.println("R2D2: Shields are deactivated!");
         } catch (InterruptedException e) {
             System.out.println("Exception was thrown: " + e);
         }
