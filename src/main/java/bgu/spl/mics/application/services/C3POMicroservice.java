@@ -11,7 +11,10 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.Ewoks;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 /**
@@ -30,12 +33,15 @@ public class C3POMicroservice extends MicroService {
 
     public C3POMicroservice() {
         super("C3PO");
-        initialize();
+        //ConcurrentMap<AttackEvent, LinkedList<Message>> messageMap = new ConcurrentHashMap<>();
+        System.out.println("C3PO is here");
+
     }
 
     @Override
     protected void initialize() {
         this.subscribeEvent(AttackEvent.class, (AttackEvent Attack) -> {
+            System.out.println("C3PO subscribed");
             //list of serial for the ewoks
             List<Integer> ewoks = Attack.attack.getSerials();
             //sort the list
@@ -55,16 +61,18 @@ public class C3POMicroservice extends MicroService {
             //record in the diary the end of the attack
             Diary.getInstance().setC3POFinish(System.currentTimeMillis());
             complete(Attack, true);
+
         });
-
-
         close();
+
+
     }
 
     @Override
     protected void close() {
         //subscribe to Broadcasts of type TerminateBroadcast
         this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+            System.out.println("C3PO has subscribed to termination broadcast");
             //record in the diary the termination time of hansolo
             Diary.getInstance().setC3POTerminate(System.currentTimeMillis());
             System.out.println("C3PO has done");
@@ -78,6 +86,7 @@ public class C3POMicroservice extends MicroService {
             //record in the diary the attack
             Diary.getInstance().totalAttacks.incrementAndGet();
             Thread.sleep(duration);
+            System.out.println("C3PO: Done attacking!");
         }catch (InterruptedException e){
             System.out.println("Interrupted" +e);
         }
