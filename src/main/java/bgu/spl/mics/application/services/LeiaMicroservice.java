@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import bgu.spl.mics.Future;
 import bgu.spl.mics.MicroService;
+import bgu.spl.mics.application.messages.DeactivationEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
 import bgu.spl.mics.application.passiveObjects.Attack;
 import bgu.spl.mics.application.messages.AttackEvent;
@@ -23,8 +24,10 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=2e5ba1f89f40b2fd1c44f85cc7c04527
 public class LeiaMicroservice extends MicroService {
 	private final Attack[] attacks;
+	private final Future[] futures = null;
 
-	
+
+
     public LeiaMicroservice(Attack[] attacks) {
         super("Leia");
 		this.attacks = attacks;
@@ -39,18 +42,10 @@ public class LeiaMicroservice extends MicroService {
         }catch (InterruptedException e){
             System.out.println("Leia has been interrupted");
         }
-    	for(int i=0; i < attacks.length; i++){
-            AttackEvent attack = new AttackEvent(attacks[i]);
-            //needs to wait for the microservices to subscribe
-            //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=b31765abcb31823c07a7ccadbffe9a7f
-            //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=20be77a3fd206cd30bd83cbd9354aa39
-    	     sendEvent(attack);
-    	     //.get(1000, TimeUnit.MILLISECONDS);
-    	     //sendBroadcast();
-        }
 
-    	Diary.getInstance().setBeginning();
-        System.out.println("Leia: I sent the attacks");
+        sandAttack();
+
+        deactivate();
 
     	close();
 
@@ -64,4 +59,25 @@ public class LeiaMicroservice extends MicroService {
         });
     }
 
+    private void sandAttack(){
+        for(int i=0; i < attacks.length; i++){
+            AttackEvent attack = new AttackEvent(attacks[i]);
+            //needs to wait for the microservices to subscribe
+            //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=b31765abcb31823c07a7ccadbffe9a7f
+            //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=20be77a3fd206cd30bd83cbd9354aa39
+            futures[i]  = sendEvent(attack);
+            //.get(1000, TimeUnit.MILLISECONDS);
+            //sendBroadcast();
+        }
+        Diary.getInstance().setBeginning();
+        System.out.println("Leia: I sent the attacks");
+    }
+
+    private void deactivate(){
+        for (Future future : futures) {
+            future.get();
+        }
+        DeactivationEvent deactivate = new DeactivationEvent();
+        sendEvent(deactivate);
+    }
 }
