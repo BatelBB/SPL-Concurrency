@@ -32,9 +32,9 @@ public class HanSoloMicroservice extends MicroService {
 
     public HanSoloMicroservice() {
         super("Han");
+        //ConcurrentMap<AttackEvent, LinkedList<Message>> messageMap = new ConcurrentHashMap<>();
+        System.out.println("Han Solo is here");
 
-        ConcurrentMap<AttackEvent, LinkedList<Message>> messageMap = new ConcurrentHashMap<>();
-        initialize();
     }
 
 
@@ -42,7 +42,7 @@ public class HanSoloMicroservice extends MicroService {
     protected void initialize() {
         //subscribe to events of type attackevent
         this.subscribeEvent(AttackEvent.class, (AttackEvent Attack) -> {
-
+            System.out.println("Han Solo subscribed");
             //list of serial for the ewoks
             List<Integer> ewoks = Attack.attack.getSerials();
             //sort the list
@@ -53,7 +53,7 @@ public class HanSoloMicroservice extends MicroService {
             for (Integer ewok : ewoks) {
                 Ewoks.getInstance().resourceManager(ewok);
             }
-            //atacks
+            //attacks
             ExecuteAttack(duration);
 
             //release resources
@@ -64,9 +64,10 @@ public class HanSoloMicroservice extends MicroService {
             //record in the diary the end of the attack
             Diary.getInstance().setHanSoloFinishTime(System.currentTimeMillis());
             complete(Attack, true);
+            close();
         });
 
-        close();
+
     }
 
     @Override
@@ -88,6 +89,7 @@ public class HanSoloMicroservice extends MicroService {
             //record in the diary the attack
             Diary.getInstance().totalAttacks.incrementAndGet();
             Thread.sleep(duration);
+            System.out.println("Han Solo: Done attacking!");
         } catch (InterruptedException e) {
             System.out.println("Interrupted" + e);
         }
