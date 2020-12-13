@@ -42,9 +42,6 @@ public class LeiaMicroservice extends MicroService {
             System.out.println("Leia has been interrupted");
         }
 
-        //starts the time of the diary
-        Diary.getInstance().setBeginning();
-
         //sends the attacks
         sandAttack();
         System.out.println("Leia: “Help me, Han Solo. You’re my only hope.”");
