@@ -15,7 +15,6 @@ public class Diary {
     private static class SingletonDiaryHolder {
         private static final Diary diary = new Diary();
     }
-
     public AtomicInteger totalAttacks = new AtomicInteger();
     long HanSoloFinish;
     long C3POFinish;
