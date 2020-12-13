@@ -2,18 +2,20 @@ package bgu.spl.mics;
 
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
+import bgu.spl.mics.application.services.C3POMicroservice;
 import bgu.spl.mics.application.services.DummyMicroservice;
+import bgu.spl.mics.application.services.HanSoloMicroservice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MessageBusImplTest {
-    private MessageBusImpl testMessageBusIml;
+    private MessageBus testMessageBusIml;
 
     @BeforeEach
     void testSetUp() {
-        //testMessageBusIml = new MessageBusImpl();
+        testMessageBusIml = MessageBusImpl.getInstance();
     }
 
     //Tested it in SendEvent
@@ -29,7 +31,7 @@ class MessageBusImplTest {
     @Test
     void testComplete() {
         AttackEvent attackEvent = new AttackEvent();
-        DummyMicroservice dummyMicroservice = new DummyMicroservice();
+        HanSoloMicroservice dummyMicroservice = new HanSoloMicroservice();
         Future<Boolean> dummyFuture = dummyMicroservice.sendEvent(attackEvent);
         if (dummyFuture == null) {
             fail("sendEvent has returned null");
@@ -43,8 +45,8 @@ class MessageBusImplTest {
     @Test
     void testSendBroadcast() {
         TerminateBroadcast terminateBroadcast = new TerminateBroadcast();
-        DummyMicroservice microService1 = new DummyMicroservice();
-        DummyMicroservice microService2 = new DummyMicroservice();
+        HanSoloMicroservice microService1 = new HanSoloMicroservice();
+        C3POMicroservice microService2 = new C3POMicroservice();
 
         microService2.subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast call) -> {
             new Callback<TerminateBroadcast>() {
@@ -68,8 +70,8 @@ class MessageBusImplTest {
     @Test
     void testSendEvent() {
         AttackEvent attackEvent = new AttackEvent();
-        DummyMicroservice microService1 = new DummyMicroservice();
-        DummyMicroservice microService2 = new DummyMicroservice();
+        HanSoloMicroservice microService1 = new HanSoloMicroservice();
+        C3POMicroservice microService2 = new C3POMicroservice();
 
         microService2.subscribeEvent(AttackEvent.class, (AttackEvent call) -> {
             new Callback<AttackEvent>() {
@@ -92,7 +94,7 @@ class MessageBusImplTest {
 
     @Test
     void testRegister() {
-        DummyMicroservice microservice = new DummyMicroservice();
+        HanSoloMicroservice microservice = new HanSoloMicroservice();
         try {
             testMessageBusIml.awaitMessage(microservice);
         } catch (InterruptedException exception) {
@@ -118,16 +120,15 @@ class MessageBusImplTest {
         ;
         testMessageBusIml.register(microService1);
         testMessageBusIml.register(microService2);
-        microService2.subscribeBroadcast(Broadcast.class, (Broadcast call) -> {
-            new Callback<Broadcast>() {
+        microService2.subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast call) -> {
+            new Callback<TerminateBroadcast>() {
                 @Override
-                public void call(Broadcast broadcast) {
+                public void call(TerminateBroadcast broadcast) {
                     //empty callback
                 }
             };
         });
-        microService1.sendBroadcast(new Broadcast() {
-        });
+        microService1.sendBroadcast(new TerminateBroadcast());
         try {
             Message message = testMessageBusIml.awaitMessage(microService2);
             if (message == null) {
