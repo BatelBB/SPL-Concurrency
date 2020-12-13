@@ -59,7 +59,7 @@ public class Main {
 
 
         }catch (InterruptedException e){
-            System.out.println("Exception was thrown: "+ e);
+            e.printStackTrace();
         }
 
         System.out.println("“I’m one with the Force. The Force is with me.” ");
