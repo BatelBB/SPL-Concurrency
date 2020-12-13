@@ -25,6 +25,7 @@ public class Main {
         Ewoks ewoks = Ewoks.getInstance();
         if(input!=null) {
             System.out.println("A Long time ago in a galaxy far far away...");
+            System.out.println("MAY THE FORCE BE WITH YOU");
             ewoks.setNumEwoks(input.getEwoks());
             initiate(input);
 
@@ -61,7 +62,7 @@ public class Main {
             System.out.println("Exception was thrown: "+ e);
         }
 
-        System.out.println("The good ones won");
+        System.out.println("“I’m one with the Force. The Force is with me.” ");
 
     }
     private static Input getInputFromJson(String filePath) throws IOException {

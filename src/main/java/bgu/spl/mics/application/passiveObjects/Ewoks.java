@@ -27,28 +27,13 @@ public class Ewoks {
         ewokArray = new ArrayList<>();
     }
 
-    // private Ewoks (int numEwoks){
-    //     this.numEwoks = numEwoks;
-    //     System.out.println("EWOKSSSS");
-    //     setNumEwoks();
-    // }
-    // public synchronized void getEwok(int[] serialNumbers){
-///return;
-    // }
-
     /**
      * OUR
      * Singleton getInstance
-     *
      * @return EwoksSingletonHolder.ewoksInstance
      */
     public static Ewoks getInstance() {
-        //if(EwoksSingletonHolder.ewoksInstance == null){
-        //synchronized (Ewoks.class){
-        //if(EwoksSingletonHolder.ewoksInstance == null){
         return EwoksSingletonHolder.ewoksInstance;
-        // }
-        // }
     }
 
     /**
@@ -59,8 +44,11 @@ public class Ewoks {
      * @param serialNumber
      */
     public void resourceManager(int serialNumber) {
+        //gets the ewoks from the ewokArray
         Ewok ewok = ewokArray.get(serialNumber-1);
+        //locks from other threads to enter
         synchronized(this) {
+            //checks if the ewok is available, if not waits
             while (!ewok.isAvailable()) {
                 try {
                     wait();
@@ -68,6 +56,7 @@ public class Ewoks {
                     System.out.println("Exception was thrown: " + e);
                 }
             }
+            //if ewok available it acquires it.
             ewok.acquire();
         }
     }
@@ -80,21 +69,24 @@ public class Ewoks {
      * @param serialNumber
      */
     public void releaseResources(int serialNumber) {
+        //gets the ewok from the ewokArray
         Ewok ewok = ewokArray.get(serialNumber-1);
+        //locks from other threads to enter
         synchronized (this) {
+            //releases the ewokes one by one
             ewok.release();
+            //notify all that are waiting for these ewoks
             notifyAll();
         }
-
     }
 
     /**
      * OUR
      * adds the new ewoks to the ewokArray
-     *
      * @param numEwoks
      */
     public void setNumEwoks(int numEwoks) {
+        //creates new ewoks from input
         for (int i = 1; i <= numEwoks; i++) {
             this.ewokArray.add(new Ewok(i));
         }

@@ -65,8 +65,12 @@ public abstract class MicroService implements Runnable {
     //In case one of these threads hasn't subscribed yet, let the messages be sent to the subscribed thread
     //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=d7d86c279f1054ba985b088234b58743
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
+        System.out.println(this.getName() + " subscribed to " + type.getSimpleName());
+        //checks if the callbackMap contains the class type that we sent
         if (!callbackMap.containsKey(type)) {
+            //if not contains, adds it to the map
             callbackMap.put(type, callback);
+            //sends it to the messageBus instance, to the subscribeEvent
             messageBusInstance.subscribeEvent(type, this);
         }
     }
@@ -93,8 +97,12 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
+        System.out.println(this.getName() + " subscribed to " + type.getSimpleName());
+        //checks if the callbackMap contains the class type that we sent
         if (!callbackMap.containsKey(type)) {
+            //if not contains, adds it to the map
             callbackMap.put(type, callback);
+            //sends it to the messageBus instance, to the subscribeBroadcast
             messageBusInstance.subscribeBroadcast(type, this);
         }
     }
@@ -117,8 +125,8 @@ public abstract class MicroService implements Runnable {
     //If no one is subscribe, the message should be "thrown", and sendMessage() should return.
     //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=cf677a1d8e2d25c77eb0feafb0c7e456
     protected final <T> Future<T> sendEvent(Event<T> e) {
-        System.out.println("Sent the event "+e.getClass().getSimpleName());
-        MessageBus messageBusInstance = MessageBusImpl.getInstance();
+        System.out.println(this.getName()+ " sent the event "+e.getClass().getSimpleName());
+        //sends the event to the messageBus
         return messageBusInstance.sendEvent(e);
     }
 
@@ -130,7 +138,8 @@ public abstract class MicroService implements Runnable {
      * @param b The broadcast message to send
      */
     protected final void sendBroadcast(Broadcast b) {
-        MessageBus messageBusInstance = MessageBusImpl.getInstance();
+        System.out.println(this.getName()+ " sent the event "+ b.getClass().getSimpleName());
+        //sends the broadcast to the messageBus
         messageBusInstance.sendBroadcast(b);
     }
 
@@ -146,6 +155,8 @@ public abstract class MicroService implements Runnable {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) {
+        System.out.println(this.getName() + " completed the event " + e.getClass().getSimpleName() + " with the result "+ result.getClass().getSimpleName());
+        //sends the event to the messageBus to be completed
         messageBusInstance.complete(e, result);
     }
 
@@ -176,10 +187,14 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
+        //registers the microservice
         messageBusInstance.register(this);
+        //initializes the microservice
         initialize();
+        //runs on loop while the microservices are alive
         while (!isTerminated) {
             try {
+                //uses the awaitMessages method to wait for messages from the message bus
                 Message message = messageBusInstance.awaitMessage(this);
                 Callback callback = callbackMap.get(message.getClass());
                 callback.call(message);
@@ -187,6 +202,7 @@ public abstract class MicroService implements Runnable {
                 e.printStackTrace();
             }
         }
+        //unregisters the microservice
         messageBusInstance.unregister(this);
     }
 

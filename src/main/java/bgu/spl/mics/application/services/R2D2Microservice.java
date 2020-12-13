@@ -22,31 +22,39 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 public class R2D2Microservice extends MicroService {
     private final long duration;
 
+    //default constructor
     public R2D2Microservice(long duration) {
         super("R2D2");
         this.duration = duration;
-        System.out.println("R2D2 is here");
+        System.out.println("R2D2: “Bleep Beep Bleep”");
 
     }
 
     @Override
     protected void initialize() {
-        subscribeEvent(DeactivationEvent.class, (DeactivationEvent deactivationEvent) -> {
-            System.out.println("R2D2 subscribed");
+        //subscribes to deactivationEvent
+        this.subscribeEvent(DeactivationEvent.class, (DeactivationEvent deactivationEvent) -> {
+            //DEACTIVATE
             deactivation();
+            //sends bombDestroyerEvent
             BombDestroyerEvent bombDestroyerEvent = new BombDestroyerEvent();
-            sendEvent(bombDestroyerEvent);
+            this.sendEvent(bombDestroyerEvent);
+            //completes the deactivation event
             complete(deactivationEvent, true);
 
         });
+        //terminates
         close();
     }
 
     @Override
     protected void close() {
+        //subscribes to the terminationBroadcast
         this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+            //writes to diary
             Diary.getInstance().setR2D2Terminate(System.currentTimeMillis());
-            System.out.println("R2D2 has done");
+            System.out.println("R2D2: “Bleep Bleep Bleep” - DONE");
+            //terminates
             this.terminate();
         });
     }
@@ -55,7 +63,7 @@ public class R2D2Microservice extends MicroService {
         try {
             this.wait(duration);
             Diary.getInstance().setR2D2Deactivate(System.currentTimeMillis());
-            System.out.println("R2D2: Shields are deactivated!");
+            System.out.println("R2D2: “Beep Beep” - Shields are deactivated!");
         } catch (InterruptedException e) {
             System.out.println("Exception was thrown: " + e);
         }

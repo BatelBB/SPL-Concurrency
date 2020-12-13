@@ -15,42 +15,47 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 public class LandoMicroservice extends MicroService {
     private final long duration;
 
+    //default constructor
     public LandoMicroservice(long duration) {
         super("Lando");
         this.duration = duration;
-        System.out.println("Lando is here");
+        System.out.println("Lando: “Hello — what have we here?”");
 
     }
 
     @Override
     protected void initialize() {
-        subscribeEvent(BombDestroyerEvent.class, (BombDestroyerEvent bombDestroyerEvent) -> {
-            System.out.println("Lando subscribed");
+        //subscribes to BombDestroyerEvent
+        this.subscribeEvent(BombDestroyerEvent.class, (BombDestroyerEvent bombDestroyerEvent) -> {
+            //Attacks
             LandoAttacks();
-            //TerminateBroadcast terminateBroadcast = new TerminateBroadcast();
-            //sendBroadcast(terminateBroadcast);
-            System.out.println("Lando sending termination broadcast!");
+            //sends the termination broadcast
             this.sendBroadcast(new TerminateBroadcast());
+
+            //completes the bombDestroyerEvent
             complete(bombDestroyerEvent,true);
-
         });
+        //terminates
         close();
-
     }
 
     @Override
     protected void close() {
+        //subscribes to terminationBroadcast
         this.subscribeBroadcast(TerminateBroadcast.class, c -> {
+            //writes to diary
             Diary.getInstance().setLandoTerminate(System.currentTimeMillis());
-            System.out.println("Lando has done");
+
+            System.out.println("Lando: “This deal is getting worse all the time.” - DONE");
             this.terminate();
         });
     }
 
     private synchronized void LandoAttacks() {
         try {
+            //attacks
             this.wait(duration);
-            System.out.println("Lando: BOOM!");
+            System.out.println("Lando: “You might want to buckle up, baby.”");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
