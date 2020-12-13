@@ -66,7 +66,7 @@ public class MessageBusImpl implements MessageBus {
                 try {
                     //gets the message from the messageMap and puts it inside
                     MessageMap.get(type.getName()).put(m);
-                    System.out.println(m.getName() + " SUBSCRIBED TO " + type.getSimpleName());
+                    System.out.println(m.getName() + " subscribed to " + type.getSimpleName());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -95,7 +95,7 @@ public class MessageBusImpl implements MessageBus {
                 try {
                     //gets the message from the messageMap and puts it inside
                     MessageMap.get(type.getName()).put(m);
-                    System.out.println(m.getName() + " SUBSCRIBED TO " + type.getSimpleName());
+                    System.out.println(m.getName() + " subscribed to " + type.getSimpleName());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -266,6 +266,7 @@ public class MessageBusImpl implements MessageBus {
     @Override
     public Message awaitMessage(MicroService m) throws InterruptedException {
         Message message = null;
+        if(!isRegistered(m)) throw new IllegalStateException();
         try {
             //uses method of the blockingQueue
             //checks if the message is available and if so takes it
@@ -274,5 +275,9 @@ public class MessageBusImpl implements MessageBus {
             e.printStackTrace();
         }
         return message;
+    }
+
+    private boolean isRegistered(MicroService m){
+        return MicroServiceMap.containsKey(m);
     }
 }

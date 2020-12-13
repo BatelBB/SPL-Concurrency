@@ -10,7 +10,6 @@ public class TerminateBroadcast implements Broadcast {
 
     public TerminateBroadcast(){
         terminateBroadcast = true;
-        System.out.println("The terminate broadcast was created");
     }
 
     public boolean getTerminateBroadcast() {

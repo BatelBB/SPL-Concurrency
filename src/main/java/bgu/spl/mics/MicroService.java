@@ -65,7 +65,6 @@ public abstract class MicroService implements Runnable {
     //In case one of these threads hasn't subscribed yet, let the messages be sent to the subscribed thread
     //https://www.cs.bgu.ac.il/~spl211/Assignments/Assignment_2Forum?action=show-thread&id=d7d86c279f1054ba985b088234b58743
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
-        System.out.println(this.getName() + " subscribed to " + type.getSimpleName());
         //checks if the callbackMap contains the class type that we sent
         if (!callbackMap.containsKey(type)) {
             //if not contains, adds it to the map
@@ -97,7 +96,6 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-        System.out.println(this.getName() + " subscribed to " + type.getSimpleName());
         //checks if the callbackMap contains the class type that we sent
         if (!callbackMap.containsKey(type)) {
             //if not contains, adds it to the map
