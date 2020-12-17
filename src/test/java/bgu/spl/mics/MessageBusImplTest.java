@@ -2,11 +2,12 @@ package bgu.spl.mics;
 
 import bgu.spl.mics.application.messages.AttackEvent;
 import bgu.spl.mics.application.messages.TerminateBroadcast;
-import bgu.spl.mics.application.services.C3POMicroservice;
-import bgu.spl.mics.application.services.DummyMicroservice;
-import bgu.spl.mics.application.services.HanSoloMicroservice;
+import bgu.spl.mics.application.services.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,6 +40,7 @@ class MessageBusImplTest {
         testMessageBusIml.complete(attackEvent, true);
         assertTrue(dummyFuture.isDone());
         assertEquals(true, dummyFuture.get());
+
     }
 
     //when I use sendEvent/Broadcast the subscribed microservice will definitely have a message in his queue to fetch?
@@ -46,21 +48,18 @@ class MessageBusImplTest {
     void testSendBroadcast() {
         TerminateBroadcast terminateBroadcast = new TerminateBroadcast();
         HanSoloMicroservice microService1 = new HanSoloMicroservice();
-        C3POMicroservice microService2 = new C3POMicroservice();
+        LandoMicroservice microService2 = new LandoMicroservice(1000);
+        testMessageBusIml.register(microService2);
+        testMessageBusIml.register(microService1);
 
-        microService2.subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast call) -> {
-            new Callback<TerminateBroadcast>() {
-                @Override
-                public void call(TerminateBroadcast c) {
-                    //empty callback
-                }
-            };
+        microService2.subscribeBroadcast(TerminateBroadcast.class, call -> {
+            microService2.terminate();
         });
         microService1.sendBroadcast(terminateBroadcast);
         try {
             Message message = testMessageBusIml.awaitMessage(microService2);
             assertEquals(message, terminateBroadcast);
-        } catch (InterruptedException exception) {
+        } catch (InterruptedException | IllegalStateException exception) {
             fail("The method awaitMessage should throw the IllegalStateException in the case\n" +
                     "* where microservice was never registered.");
         }
@@ -72,21 +71,17 @@ class MessageBusImplTest {
         AttackEvent attackEvent = new AttackEvent();
         HanSoloMicroservice microService1 = new HanSoloMicroservice();
         C3POMicroservice microService2 = new C3POMicroservice();
-
+        testMessageBusIml.register(microService2);
         microService2.subscribeEvent(AttackEvent.class, (AttackEvent call) -> {
-            new Callback<AttackEvent>() {
-                @Override
-                public void call(AttackEvent attackEvent1) {
-                    //empty callback
-                }
-            };
+
+
         });
         microService1.sendEvent(attackEvent);
         try {
             Message message = testMessageBusIml.awaitMessage(microService2);
             assertTrue(message instanceof AttackEvent);
             assertEquals(message, attackEvent);
-        } catch (InterruptedException exception) {
+        } catch (InterruptedException | IllegalStateException exception) {
             fail("The method awaitMessage should throw the IllegalStateException in the case\n" +
                     "* where microservice was never registered.");
         }
@@ -97,7 +92,7 @@ class MessageBusImplTest {
         HanSoloMicroservice microservice = new HanSoloMicroservice();
         try {
             testMessageBusIml.awaitMessage(microservice);
-        } catch (InterruptedException exception) {
+        } catch (IllegalStateException | InterruptedException exception) {
             fail("The method awaitMessage should throw the IllegalStateException in the case\n" +
                     "* where microservice was never registered.");
         }
@@ -107,9 +102,10 @@ class MessageBusImplTest {
     //test only the case where there's a message waiting to be fetched, and make sure it is indeed fetched.
     @Test
     void testAwaitMessage() {
-        DummyMicroservice microService1 = new DummyMicroservice();
-        DummyMicroservice microService2 = new DummyMicroservice();
+        HanSoloMicroservice microService1 = new HanSoloMicroservice();
+        C3POMicroservice microService2 = new C3POMicroservice();
         AttackEvent attackEvent = new AttackEvent();
+
         try {
             testMessageBusIml.awaitMessage(microService1);
             fail("The method awaitMessage should throw the IllegalStateException in the case\n" +
@@ -120,25 +116,23 @@ class MessageBusImplTest {
         ;
         testMessageBusIml.register(microService1);
         testMessageBusIml.register(microService2);
-        microService2.subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast call) -> {
-            new Callback<TerminateBroadcast>() {
-                @Override
-                public void call(TerminateBroadcast broadcast) {
-                    //empty callback
-                }
-            };
+
+        microService2.subscribeBroadcast(TerminateBroadcast.class, call-> {
+            microService2.terminate();
+
         });
-        microService1.sendBroadcast(new TerminateBroadcast());
+        TerminateBroadcast terminateBroadcast = new TerminateBroadcast();
+
         try {
+            microService1.sendBroadcast(terminateBroadcast);
             Message message = testMessageBusIml.awaitMessage(microService2);
             if (message == null) {
                 fail("Message is null");
             } else {
                 assertTrue(message instanceof Broadcast);
-                assertEquals(message, new Broadcast() {
-                });
+                assertEquals(message, terminateBroadcast);
             }
-        } catch (InterruptedException exception) {
+        } catch (InterruptedException | IllegalStateException exception) {
             fail("The method awaitMessage should throw the IllegalStateException in the case\n" +
                     "* where microservice was never registered.");
         }
